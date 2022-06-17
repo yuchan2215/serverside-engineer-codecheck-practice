@@ -1,3 +1,4 @@
+import csv
 from argparse import ArgumentParser, Namespace
 
 
@@ -9,6 +10,13 @@ def get_option() -> Namespace:
     _argParser = ArgumentParser()
     _argParser.add_argument('fileName', type=str, help="利用するCSVファイル名を指定します。")
     return _argParser.parse_args()
+
+
+def readCsv():
+    with open(fileName) as f:
+        reader = csv.reader(f)
+        for row in reader:
+            pass  # TODO any
 
 
 if __name__ == "__main__":
