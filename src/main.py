@@ -1,4 +1,5 @@
 import csv
+import sys
 from argparse import ArgumentParser, Namespace
 
 from player import Player
@@ -95,3 +96,24 @@ if __name__ == "__main__":
     # コマンドライン引数の読み取り
     args = get_option()
     fileName = str(args.fileName)
+
+    # CSVを読み込む（エラーがあれば出力する。）
+    error = True
+    try:
+        readCsv()
+    except FileNotFoundError:
+        print(f'"{fileName}"というファイルは見つかりませんでした。')
+    except IsADirectoryError:
+        print('ディレクトリが指定されています')
+    except PermissionError as e:
+        print('権限がありません\n', e)
+    except ValueError as e:
+        print('CSVの値に想定外のものがありました\n', e)
+    except Exception as e:
+        print('CSVの読み込みに失敗しました\n', e)
+    else:
+        error = False
+
+    if error:
+        # エラーがあったのであればプログラムを終了する。
+        sys.exit(1)
