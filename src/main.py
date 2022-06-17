@@ -92,6 +92,45 @@ def readCsv():
             readRow(row=row)
 
 
+def dicSort() -> list:
+    """
+    プレイヤーの辞書を平均得点順でソートします。
+    :return: ソートされたリストです。
+    """
+    global players
+
+    return sorted(players.items(), key=lambda p: p[1].getAverage(), reverse=True)
+
+
+def output(playersList: list):
+    """
+    結果を出力します
+    :param playersList: プレイヤーのリスト
+    """
+    count = 0  # 順位重複関係なく増える値
+    rank = 0  # 順位重複を考慮した値
+    cacheScore = None  # 順位重複を考慮するためのキャッシュ
+
+    print("rank,player_id,mean_score")
+    for i in playersList:
+        playerId: str = i[0]
+        player: Player = i[1]
+
+        avg = player.getAverage()
+        count += 1
+
+        # 点数変動があるなら
+        if cacheScore != avg:
+            if count > 10:
+                # 生の順位が11を超えているなら抜ける
+                break
+
+            rank = count  # ランクを１つ上げる
+            cacheScore = avg  # キャッシュを更新する
+
+        print(f'{rank},{playerId},{avg}')
+
+
 if __name__ == "__main__":
     # コマンドライン引数の読み取り
     args = get_option()
@@ -117,3 +156,6 @@ if __name__ == "__main__":
     if error:
         # エラーがあったのであればプログラムを終了する。
         sys.exit(1)
+
+    sortedList = dicSort()  # ソートする
+    output(sortedList)
