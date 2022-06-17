@@ -71,11 +71,20 @@ def readRow(row: list):
             # 成功したなら早期リターンをする。
             return
 
-    # TODO ANY
+    # 最初の行で無ければ行の読み込み機能を作っていく。
+    # 日付は扱わないのでプログラム内で取り扱わない。
+    name = str(row[1])
+    score = int(row[2])
+
+    # プレイヤーを辞書から取得し、結果を追加する。
+    getPlayer(name).addResult(score)
 
 
 def readCsv():
-    with open(fileName) as f:
+    """
+    CSVを読み込みます。
+    """
+    with open(fileName, 'r') as f:
         reader = csv.reader(f)
         for row in reader:
             # 行の読み込みを行う。
