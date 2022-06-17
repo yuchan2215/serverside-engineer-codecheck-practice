@@ -2,6 +2,11 @@ import csv
 from argparse import ArgumentParser, Namespace
 
 
+class FormatError(Exception):
+    """フォーマットが正しく無い時に呼び出されます。"""
+    pass
+
+
 def get_option() -> Namespace:
     """
     プログラムに渡された引数を取得します。
