@@ -125,7 +125,7 @@ def output(playersList: list):
                 # 生の順位が11を超えているなら抜ける
                 break
 
-            rank = count  # ランクを１つ上げる
+            rank = count  # ランク更新する
             cacheScore = avg  # キャッシュを更新する
 
         print(f'{rank},{playerId},{avg}')
@@ -158,4 +158,4 @@ if __name__ == "__main__":
         sys.exit(1)
 
     sortedList = dicSort()  # ソートする
-    output(sortedList)
+    output(sortedList)  # 出力する
