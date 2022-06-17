@@ -151,6 +151,8 @@ if __name__ == "__main__":
         print('権限がありません\n', e)
     except ValueError as e:
         print('CSVの値に想定外のものがありました\n', e)
+    except FormatError:
+        print('ファイルのフォーマットが正しくありません。')
     except Exception as e:
         print('CSVの読み込みに失敗しました\n', e)
     else:
