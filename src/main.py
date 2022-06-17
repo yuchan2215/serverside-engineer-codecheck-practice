@@ -1,6 +1,8 @@
 import csv
 from argparse import ArgumentParser, Namespace
 
+from player import Player
+
 
 class FormatError(Exception):
     """フォーマットが正しく無い時に呼び出されます。"""
@@ -28,6 +30,25 @@ def formatCheck(row: list) -> bool:
 
 
 readFirst: bool = False  # 最初の行を読み込んだか
+players: dict = {}  # プレイヤー一覧を入れていく辞書
+
+
+def getPlayer(playerId: str) -> Player:
+    """
+    辞書からプレイヤーを探します。無ければ新しく作ります。
+
+    :param playerId: プレイヤーID
+    :return: プレイヤー
+    """
+    if playerId in players:
+        # もし含まれるのであればその値を返す
+        return players.get(playerId)
+    else:
+        # もし含まれないなら新しく生成して返す。
+
+        player = Player()  # 新規プレイヤー
+        players[playerId] = player  # 辞書に追加
+        return player
 
 
 def readRow(row: list):
