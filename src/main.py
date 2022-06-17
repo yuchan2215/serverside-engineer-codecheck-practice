@@ -99,7 +99,10 @@ def dicSort() -> list:
     """
     global players
 
-    return sorted(players.items(), key=lambda p: p[1].getAverage(), reverse=True)
+    return sorted(players.items(), key=lambda p: (
+        p[1].getAverage() * -1,  # 点数のソート。名前のソートもするため、Reverseを使わずに-1をかける。
+        p[0]  # 名前でソートする。
+    ))
 
 
 def output(playersList: list):
