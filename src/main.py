@@ -4,7 +4,7 @@ import sys
 from argparse import ArgumentParser, Namespace
 from typing import Dict, List
 
-# CSVに対応するタイトル。
+# CSVに対応するカラム名
 PLAYER_ID_COLUMN = 'player_id'
 SCORE_COLUMN = 'score'
 
@@ -17,20 +17,20 @@ class Player:
     プレイヤー型。
     省メモリを実現するために、辞書と併用して利用することを想定してプレイヤーIDは保持していません。
     """
-    _gameCount: int = 0  # プレイしたゲームの数
-    _sumScore: int = 0  # 合計スコア
+    _game_count: int = 0  # プレイしたゲームの数
+    _sum_score: int = 0  # 合計スコア
 
     def getAverage(self) -> int:
         """
         プレイヤーの平均スコアを計算します。
         :return: 四捨五入された平均スコアです。
         """
-        if self._gameCount == 0:
+        if self._game_count == 0:
             # 0除算対策
             return 0
 
         # 平均を返す
-        return round(self._sumScore / self._gameCount)
+        return round(self._sum_score / self._game_count)
 
     def addResult(self, score: int):
         """
@@ -39,8 +39,8 @@ class Player:
         """
 
         # ゲームのカウント値とスコアを変動させる。
-        self._gameCount += 1
-        self._sumScore += score
+        self._game_count += 1
+        self._sum_score += score
 
 
 class RankingObject:
@@ -49,11 +49,11 @@ class RankingObject:
     同一スコアのプレイヤーをまとめるために使用します。
     """
     score: int
-    playerIds: List[str]
+    player_ids: List[str]
 
     def __init__(self, score: int, playerIds: List[str]):
         self.score = score
-        self.playerIds = playerIds
+        self.player_ids = playerIds
 
 
 def get_option() -> Namespace:
@@ -61,9 +61,9 @@ def get_option() -> Namespace:
     プログラムに渡された引数を取得します。
     :return: 引数から渡された値
     """
-    _argParser = ArgumentParser()
-    _argParser.add_argument('fileName', type=str, help="利用するCSVファイル名を指定します。")
-    return _argParser.parse_args()
+    _arg_parser = ArgumentParser()
+    _arg_parser.add_argument('fileName', type=str, help="利用するCSVファイル名を指定します。")
+    return _arg_parser.parse_args()
 
 
 def readCsv(fileName: str) -> Dict[str, Player]:
@@ -98,8 +98,8 @@ def mean_by_player(records: Dict[str, Player]) -> Dict[str, int]:
     """
     means: Dict[str, int] = {}
 
-    for playerId, record in records.items():
-        means[playerId] = record.getAverage()
+    for player_id, record in records.items():
+        means[player_id] = record.getAverage()
 
     return means
 
@@ -139,18 +139,18 @@ def output(rankDict: Dict[int, RankingObject], report_players: int = REPORT_PLAY
     """
     print("rank,player_id,mean_score")
     printed = 0
-    for (rank, rankingObj) in rankDict.items():
+    for (rank, ranking_obj) in rankDict.items():
         rank: int
-        rankingObj: RankingObject
+        ranking_obj: RankingObject
 
         # 出力した件数が出力する順位以上であれば抜ける。
         if report_players <= printed:
             break
 
         # プレイヤー名昇順で出力する。
-        sorted_player_ids = sorted(rankingObj.playerIds)
+        sorted_player_ids = sorted(ranking_obj.player_ids)
         for player_id in sorted_player_ids:
-            print(f"{rank},{player_id},{rankingObj.score}")
+            print(f"{rank},{player_id},{ranking_obj.score}")
 
         # 印刷件数を変える。
         printed += len(sorted_player_ids)
@@ -159,15 +159,15 @@ def output(rankDict: Dict[int, RankingObject], report_players: int = REPORT_PLAY
 def main():
     # コマンドライン引数の読み取り
     args = get_option()
-    fileName = str(args.fileName)
+    file_name = str(args.fileName)
 
     # CSVを読み込む（エラーがあれば出力する。）
     error = True
     records: Dict[str, Player] = {}
     try:
-        records = readCsv(fileName)
+        records = readCsv(file_name)
     except FileNotFoundError:
-        print(f'"{fileName}"というファイルは見つかりませんでした。')
+        print(f'"{file_name}"というファイルは見つかりませんでした。')
     except IsADirectoryError:
         print('ディレクトリが指定されています')
     except PermissionError as e:
