@@ -167,15 +167,15 @@ def main():
     try:
         records = readCsv(file_name)
     except FileNotFoundError:
-        print(f'"{file_name}"というファイルは見つかりませんでした。')
+        print(f'"{file_name}"というファイルは見つかりませんでした。', file=sys.stderr)
     except IsADirectoryError:
-        print('ディレクトリが指定されています')
+        print('ディレクトリが指定されています', file=sys.stderr)
     except PermissionError as e:
-        print('権限がありません\n', e)
+        print('権限がありません\n', e, file=sys.stderr)
     except ValueError as e:
-        print('CSVの値に想定外のものがありました\n', e)
+        print('CSVの値に想定外のものがありました\n', e, file=sys.stderr)
     except Exception as e:
-        print('CSVの読み込みに失敗しました\n', e)
+        print('CSVの読み込みに失敗しました\n', e, file=sys.stderr)
     else:
         error = False
 
